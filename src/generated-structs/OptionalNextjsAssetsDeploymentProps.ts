@@ -14,12 +14,18 @@ export interface OptionalNextjsAssetsDeploymentProps {
   /**
    * @stability stable
    */
-  readonly relativePathToWorkspace?: string;
+  readonly relativePathToPackage?: string;
   /**
+   * If true, logs details in custom resource lambda.
    * @default true
    * @stability stable
    */
   readonly debug?: boolean;
+  /**
+   * Prefix to the URI path the app will be served at.
+   * @stability stable
+   */
+  readonly basePath?: string;
   /**
    * @stability stable
    */
@@ -35,11 +41,11 @@ export interface OptionalNextjsAssetsDeploymentProps {
   /**
    * @stability stable
    */
-  readonly containerMountPathForEfs?: string;
+  readonly buildImageDigest?: string;
   /**
    * @stability stable
    */
-  readonly buildImageDigest?: string;
+  readonly buildId?: string;
   /**
    * @stability stable
    */

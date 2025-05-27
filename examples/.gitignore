@@ -2,3 +2,11 @@ node_modules
 pruned
 .env.local
 cdk.context.json
+outputs.json
+cdk.out
+.env
+# files copied into examples folder when cdk-nextjs is building
+.dockerignore
+# /*.Dockerfile only ignores .Dockerfiles in examples folder
+/*.Dockerfile
+cdk-nextjs-cache-handler.cjs

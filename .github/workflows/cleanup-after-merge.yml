@@ -1,0 +1,51 @@
+name: Cleanup After Merge
+on:
+  pull_request_target:
+    types: [closed]
+env:
+  ENV: pr-${{ github.event.pull_request.number }}
+
+jobs:
+  check-if-should-run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Workflow should run for closed PR ${{ github.event.pull_request.number }}"
+  cleanup-global-functions:
+    needs: check-if-should-run
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-base
+        with:
+          aws_account: ${{ vars.AWS_ACCOUNT }}
+      - name: Cleanup global-functions
+        run: cd examples/global-functions && pnpm run destroy:ci
+        continue-on-error: true
+  cleanup-global-containers:
+    needs: check-if-should-run
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-base
+        with:
+          aws_account: ${{ vars.AWS_ACCOUNT }}
+      - name: Cleanup global-containers
+        run: cd examples/global-containers && pnpm run destroy:ci
+        continue-on-error: true
+  cleanup-regional-containers:
+    needs: check-if-should-run
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-base
+        with:
+          aws_account: ${{ vars.AWS_ACCOUNT }}
+      - name: Cleanup regional-containers
+        run: cd examples/regional-containers && pnpm run destroy:ci
+        continue-on-error: true

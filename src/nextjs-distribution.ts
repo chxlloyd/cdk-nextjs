@@ -1,4 +1,4 @@
-import { CfnOutput, Duration, Stack } from "aws-cdk-lib";
+import { Duration, Stack } from "aws-cdk-lib";
 import { ICertificate } from "aws-cdk-lib/aws-certificatemanager";
 import {
   AddBehaviorOptions,
@@ -39,7 +39,7 @@ import { ApplicationLoadBalancer } from "aws-cdk-lib/aws-elasticloadbalancingv2"
 import { IFunctionUrl } from "aws-cdk-lib/aws-lambda";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
-import { NextjsType } from "./common";
+import { NextjsType } from "./constants";
 import { OptionalDistributionProps } from "./generated-structs/OptionalDistributionProps";
 import { OptionalS3OriginBucketWithOACProps } from "./generated-structs/OptionalS3OriginBucketWithOACProps";
 import { PublicDirEntry } from "./nextjs-build/nextjs-build";
@@ -142,9 +142,6 @@ export class NextjsDistribution extends Construct {
     this.distribution = this.getDistribution();
     this.addStaticBehaviors();
     this.addDynamicBehaviors();
-    new CfnOutput(this, "DistributionDomainName", {
-      value: this.distribution.domainName,
-    });
   }
 
   private createStaticOrigin(): IOrigin {
@@ -352,7 +349,7 @@ export class NextjsDistribution extends Construct {
   }
   private addStaticBehaviors() {
     this.distribution.addBehavior(
-      "_next/static*",
+      this.getPathPattern("_next/static*"),
       this.staticOrigin,
       this.staticBehaviorOptions,
     );
